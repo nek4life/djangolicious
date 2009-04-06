@@ -49,4 +49,9 @@ class DeliciousSyncDB:
         posts = self.api.posts_all(results = 'results')
         for post in posts['posts']:
             self._syncPost(post)
+            
+    def syncAll(self):
+        posts = self.api.posts_all()
+        for post in posts['posts']:
+            self._syncPost(post)
         
