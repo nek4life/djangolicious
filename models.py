@@ -1,6 +1,8 @@
 from django.db import models
 from tagging.fields import TagField
 
+from djangolicious.managers import PublicManager
+
 class Bookmark(models.Model):
     title             = models.CharField(max_length=250)
     slug              = models.SlugField()
