@@ -1,6 +1,4 @@
 from django.db import models
-import datetime
-
 
 class PublicManager(models.Manager):
     def get_query_set(self):
