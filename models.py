@@ -2,15 +2,17 @@ from django.db import models
 from tagging.fields import TagField
 
 class Bookmark(models.Model):
-    title     = models.CharField(max_length=250)
-    slug      = models.SlugField()
-    url       = models.URLField(unique=True)
-    tags      = TagField()
-    notes     = models.TextField()
-    post_hash = models.CharField(max_length=100)
-    post_meta = models.CharField(max_length=100)
-    save_date = models.DateTimeField()
-    shared    = models.BooleanField(default=True)
+    title             = models.CharField(max_length=250)
+    slug              = models.SlugField()
+    url               = models.URLField(unique=True)
+    tags              = TagField()
+    notes             = models.TextField()
+    post_hash         = models.CharField(max_length=100)
+    post_meta         = models.CharField(max_length=100)
+    save_date         = models.DateTimeField()
+    shared            = models.BooleanField(default=True)
+    objects           = models.Manager()
+    published_objects = PublicManager()
     
     def __unicode__(self):
         return self.title
