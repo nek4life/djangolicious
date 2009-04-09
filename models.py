@@ -1,7 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from tagging.fields import TagField
-from pydelicious import DeliciousAPI
 import datetime
 
 from djangolicious.managers import PublicManager
@@ -26,7 +25,7 @@ class Bookmark(models.Model):
     class Meta:
         ordering = ('-save_date',)
         
-    def save(self, syncAPI=False):
+    def save(self, syncAPI=False, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
         if not syncAPI:

@@ -28,7 +28,7 @@ class DeliciousSyncDB:
             'shared': shared
         }
         
-        b, created = Bookmark.objects.get_or_create(post_hash = d['post_hash'], defaults = d)
+        b, created = Bookmark.objects.get_or_create(url = d['url'], defaults = d)
         if created == False:
             if not b.post_meta == unicode(d['post_meta']):
                 b = Bookmark(
@@ -44,7 +44,7 @@ class DeliciousSyncDB:
                      )
                 b.save(syncAPI=True)
                 
-    def syncRecent(self, results='15'):
+    def syncRecent(self, results=15):
         posts = self.api.posts_all(results = str(results))
         for post in posts['posts']:
             self._syncPost(post)
