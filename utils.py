@@ -1,5 +1,7 @@
 from pydelicious import DeliciousAPI
 import dateutil.parser, dateutil.tz
+import time
+
 from djangolicious.models import Bookmark
 
 class DeliciousSyncDB:
@@ -71,5 +73,6 @@ class DeliciousSyncDB:
                         replace='yes')
                 bookmark.queued = False
                 bookmark.save(syncAPI=True)
+                time.sleep(1.5)
             except: 
                 pass
