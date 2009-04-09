@@ -59,6 +59,7 @@ class DeliciousSyncDB:
     def processQueue(self):
         bookmarks = Bookmark.objects.filter(queued=True)
         for bookmark in bookmarks:
+            time.sleep(1.5)
             try:
                 if bookmark.shared == False:
                     shared = 'no'
@@ -73,6 +74,5 @@ class DeliciousSyncDB:
                         replace='yes')
                 bookmark.queued = False
                 bookmark.save(syncAPI=True)
-                time.sleep(1.5)
             except: 
                 pass
