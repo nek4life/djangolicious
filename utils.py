@@ -1,16 +1,15 @@
 from pydelicious import DeliciousAPI
 import dateutil.parser, dateutil.tz
-
 from djangolicious.models import Bookmark
 
 class DeliciousSyncDB:
     
     def __init__(self, username, password):
         self.api = DeliciousAPI(username, password)
-
+        
     def _syncPost(self, post):
         save_date = dateutil.parser.parse(post['time'])
-      
+        
         try:
             shared = post['shared']
         except KeyError:
@@ -28,7 +27,7 @@ class DeliciousSyncDB:
             'save_date': save_date,
             'shared': shared
         }
-            
+        
         b, created = Bookmark.objects.get_or_create(post_hash = d['post_hash'], defaults = d)
         if created == False:
             if not b.post_meta == unicode(d['post_meta']):
@@ -43,15 +42,34 @@ class DeliciousSyncDB:
                         save_date=d['save_date'],
                         shared=d['shared']
                      )
-                b.save()
+                b.save(syncAPI=True)
                 
     def syncRecent(self, results='15'):
-        posts = self.api.posts_all(results = 'results')
+        posts = self.api.posts_all(results = str(results))
         for post in posts['posts']:
             self._syncPost(post)
             
     def syncAll(self):
         posts = self.api.posts_all()
         for post in posts['posts']:
-            self._syncPost(post)
+            self._syncPost(post)        
         
+    def processQueue(self):
+        bookmarks = Bookmark.objects.filter(queued=True)
+        for bookmark in bookmarks:
+            try:
+                if bookmark.shared == False:
+                    shared = 'no'
+                else:
+                    shared = 'yes'
+                self.api.posts_add(
+                        bookmark.url,
+                        bookmark.title,
+                        extended=bookmark.notes,
+                        tags=bookmark.tags,
+                        shared=shared,
+                        replace='yes')
+                bookmark.queued = False
+                bookmark.save(syncAPI=True)
+            except: 
+                pass
