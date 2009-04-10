@@ -10,7 +10,7 @@ class Bookmark(models.Model):
     slug              = models.SlugField()
     url               = models.URLField(unique=True)
     tags              = TagField()
-    notes             = models.TextField()
+    notes             = models.TextField(blank=True, null=True)
     post_hash         = models.CharField(max_length=100)
     post_meta         = models.CharField(max_length=100)
     save_date         = models.DateTimeField()
@@ -26,6 +26,16 @@ class Bookmark(models.Model):
         ordering = ('-save_date',)
         
     def save(self, syncAPI=False, **kwargs):
+        """
+        syncAPI is True for all calls from djangolicious.utils.DeliciousSyncDB.
+        
+        This allows for a check to see if a bookmark has been created locally 
+        or remotely through the syncAPI.
+        
+        Bookmarks that have been flagged as queued are processed by the
+        DeliciousSyncDB.processQueue sending locally modified bookmarks
+        back to Delicious.
+        """
         if not self.slug:
             self.slug = slugify(self.title)
         if not syncAPI:

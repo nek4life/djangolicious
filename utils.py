@@ -5,9 +5,22 @@ from djangolicious.models import Bookmark
 class DeliciousSyncDB:
     
     def __init__(self, username, password):
+        """
+        Initializes the DeliciousSyncDB object.
+        
+        This functions accepts two arguments
+        username and password. Both are required. 
+        """
         self.api = DeliciousAPI(username, password)
         
     def _syncPost(self, post):
+        """
+        Utility function that saves bookmarks to the
+        local database.
+        
+        In the case a bookmark already exists it will be
+        updated instead.
+        """
         save_date = dateutil.parser.parse(post['time'])
         
         try:
@@ -45,16 +58,47 @@ class DeliciousSyncDB:
                 b.save(syncAPI=True)
                 
     def syncRecent(self, results=15):
+        """
+        Syncronizes recent Delicious boomarks to a
+        local database.
+        
+        This uses the posts/all api call instead of
+        using the posts/recent call. Doing so provides the
+        meta attribute in order to update previously saved
+        bookmarks with modified data from Delicious.
+        
+        syncRecent takes one argument for results. If not 
+        specified the default number of results returned
+        is 15.
+        """
         posts = self.api.posts_all(results = str(results))
         for post in posts['posts']:
             self._syncPost(post)
             
     def syncAll(self):
+        """
+        Syncronizes all Delicious boomarks to a
+        local database.
+        
+        Using the meta attribute previously saved bookmarks
+        will also be updated as well.
+        """
         posts = self.api.posts_all()
         for post in posts['posts']:
             self._syncPost(post)        
         
     def processQueue(self):
+        """
+        Queue processor to process local bookmarks that are
+        going to be pushed to Delicious using posts/add.
+        
+        Bookmarks saved locally are flagged as queued and
+        unflagged as they have been processed.
+        
+        If a boomark is unsucessfully updated the program will
+        fail silently and move on to the next one until the
+        entire queue has been processed once through.
+        """
         bookmarks = Bookmark.objects.filter(queued=True)
         for bookmark in bookmarks:
             try:
