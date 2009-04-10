@@ -1,5 +1,7 @@
 from pydelicious import DeliciousAPI
 import dateutil.parser, dateutil.tz
+import time
+
 from djangolicious.models import Bookmark
 
 class DeliciousSyncDB:
@@ -101,6 +103,7 @@ class DeliciousSyncDB:
         """
         bookmarks = Bookmark.objects.filter(queued=True)
         for bookmark in bookmarks:
+            time.sleep(1.5)
             try:
                 if bookmark.shared == False:
                     shared = 'no'
