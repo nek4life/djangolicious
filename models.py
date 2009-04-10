@@ -6,6 +6,7 @@ import datetime
 from djangolicious.managers import PublicManager
 
 class Bookmark(models.Model):
+    """ Bookmark model """
     title             = models.CharField(max_length=250)
     slug              = models.SlugField()
     url               = models.URLField(unique=True)
