@@ -11,6 +11,8 @@ Dependancies:
 * feedparser : http://www.feedparser.org/ (required for pydelicious)
 * pydelicious : http://code.google.com/p/pydelicious/
 * django-tagging : http://code.google.com/p/django-tagging/
+* Python-Markdown : http://pypi.python.org/pypi/Markdown
+* Smartypants.py : http://web.chad.org/projects/smartypants.py/
 
 Example usage:
 
