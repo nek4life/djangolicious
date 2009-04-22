@@ -2,6 +2,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from tagging.fields import TagField
 import datetime
+from smartypants import smartyPants
+from markdown import markdown
 
 from djangolicious.managers import PublicManager
 
@@ -12,6 +14,7 @@ class Bookmark(models.Model):
     url               = models.URLField(unique=True)
     tags              = TagField()
     notes             = models.TextField(blank=True, null=True)
+    notes_html        = models.TextField(blank=True)
     post_hash         = models.CharField(max_length=100)
     post_meta         = models.CharField(max_length=100)
     save_date         = models.DateTimeField()
@@ -24,7 +27,7 @@ class Bookmark(models.Model):
         return self.title
     
     class Meta:
-        ordering = ('-save_date',)
+        ordering = ('save_date',)
         
     def save(self, syncAPI=False, **kwargs):
         """
@@ -43,5 +46,6 @@ class Bookmark(models.Model):
             self.queued = True
             if not self.id:
                 self.save_date =  datetime.datetime.now()
-                                     
+            if self.notes:
+                self.notes_html  = smartyPants(markdown(self.notes))                                     
         super(Bookmark, self).save(force_insert=False)
