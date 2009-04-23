@@ -10,7 +10,7 @@ from djangolicious.managers import PublicManager
 class Bookmark(models.Model):
     """ Bookmark model """
     title             = models.CharField(max_length=250)
-    slug              = models.SlugField()
+    slug              = models.SlugField(max_length=250)
     url               = models.URLField(unique=True)
     tags              = TagField()
     notes             = models.TextField(blank=True, null=True)

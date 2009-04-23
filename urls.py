@@ -22,4 +22,8 @@ urlpatterns = patterns('djangolicious.views',
     url(r'^(?P<year>\d{4})/$',
         view=views.bookmark_archive_year,
         name='bookmark_archive_year'),
+
+    url(r'^tags/(?P<tag>[^/]+)/$',
+        view=views.bookmark_tag_detail,
+        name='bookmark_tag_detail'),
 )
