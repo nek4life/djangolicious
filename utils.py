@@ -15,6 +15,18 @@ class DeliciousSyncDB:
         """
         self.api = DeliciousAPI(username, password)
         
+    def _cleanTags(self, tags):
+        """
+        Utility function that sets tags to lower case, removes
+        commas and double quotes and removes all duplicate tags.
+        
+        Returns a unicode string.  
+        """
+        tags = tags.lower().replace('\"', '').replace(',', '').split(' ')
+        tags = set(tags)
+        tags = ' '.join(tags)
+        return u'%s' % tags
+        
     def _syncPost(self, post):
         """
         Utility function that saves bookmarks to the
@@ -32,10 +44,11 @@ class DeliciousSyncDB:
         finally:
             if shared == 'no': shared = False
             
+        tags = self._cleanTags(post['tag'])
         d = {
             'title': post['description'], 
             'url': post['href'],
-            'tags': post['tag'],
+            'tags': tags,
             'notes': post['extended'],
             'post_hash': post['hash'],
             'post_meta': post['meta'],
