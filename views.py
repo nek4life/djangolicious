@@ -6,7 +6,7 @@ from tagging.views import tagged_object_list
 def bookmark_list(request, page=0):
     return list_detail.object_list(
         request,
-        queryset = Bookmark.published_objects.all(),
+        queryset = Bookmark.shared_objects.all(),
         template_object_name = 'bookmark',
         page = page,
         paginate_by = 10,
@@ -19,9 +19,9 @@ def bookmark_detail(request, slug, year, month, day):
         year = year,
         month = month,
         day = day,
-        date_field = 'published',
+        date_field = 'save_date',
         template_object_name = 'bookmark',
-        queryset = Bookmark.published_objects.all(),
+        queryset = Bookmark.shared_objects.all(),
     )
     
 def bookmark_archive_day(request, year, month, day):
@@ -30,9 +30,9 @@ def bookmark_archive_day(request, year, month, day):
         year = year,
         month = month,
         day = day,
-        date_field = 'published',
+        date_field = 'save_date',
         template_object_name = 'bookmark',
-        queryset = Bookmark.published_objects.all(),
+        queryset = Bookmark.shared_objects.all(),
     )
     
 def bookmark_archive_month(request, year, month):
@@ -40,23 +40,23 @@ def bookmark_archive_month(request, year, month):
         request,
         year = year,
         month = month,
-        date_field = 'published',
+        date_field = 'save_date',
         template_object_name = 'bookmark',
-        queryset = Bookmark.published_objects.all(),
+        queryset = Bookmark.shared_objects.all(),
     )
     
 def bookmark_archive_year(request, year):
     return date_based.archive_year(
         request,
         year = year,
-        date_field = 'published',
+        date_field = 'save_date',
         template_object_name = 'bookmark',
-        queryset = Bookmark.published_objects.all(),
+        queryset = Bookmark.shared_objects.all(),
         make_object_list = True,
     )
     
 def bookmark_tag_detail(request, tag):
-    queryset = Bookmark.published_objects.all()
+    queryset = Bookmark.shared_objects.all()
     return tagged_object_list(
         request,
         queryset,

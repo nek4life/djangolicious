@@ -8,11 +8,15 @@ stable feature set.
 
 Dependancies:
 
+I'm hoping to one day bootstrap this project and make some of these optional, until then here they are in all their glory.
+
+* python-dateutils : http://http://labix.org/python-dateutil
 * feedparser : http://www.feedparser.org/ (required for pydelicious)
 * pydelicious : http://code.google.com/p/pydelicious/
 * django-tagging : http://code.google.com/p/django-tagging/
 * Python-Markdown : http://pypi.python.org/pypi/Markdown
 * Smartypants.py : http://web.chad.org/projects/smartypants.py/
+* Akismet : http://www.voidspace.org.uk/python/akismet_python.html
 
 Example usage:
 
