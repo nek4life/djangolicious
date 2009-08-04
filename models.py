@@ -25,7 +25,7 @@ class Bookmark(models.Model):
     notes_html        = models.TextField(blank=True)
     post_hash         = models.CharField(max_length=100)
     post_meta         = models.CharField(max_length=100)
-    save_date         = models.DateTimeField()
+    save_date         = models.DateTimeField(default=datetime.datetime.now)
     shared            = models.BooleanField(default=True)
     featured          = models.BooleanField(default=False)
     queued            = models.BooleanField(editable=False, default=False)
@@ -37,7 +37,7 @@ class Bookmark(models.Model):
         return self.title
     
     class Meta:
-        ordering = ('save_date',)
+        ordering = ('-save_date',)
         
     def save(self, syncAPI=False, force_insert=False, force_update=False):
         """
@@ -56,8 +56,6 @@ class Bookmark(models.Model):
             self.notes_html  = smartyPants(markdown(self.notes))
         if syncAPI == False:
             self.queued = True
-            if not self.id:
-                self.save_date =  datetime.datetime.now()
                                    
         super(Bookmark, self).save(force_insert, force_update)
         
