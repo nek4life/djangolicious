@@ -28,7 +28,7 @@ class Bookmark(models.Model):
     save_date         = models.DateTimeField(default=datetime.datetime.now)
     shared            = models.BooleanField(default=True)
     featured          = models.BooleanField(default=False)
-    queued            = models.BooleanField(editable=False, default=False)
+    queued            = models.BooleanField(default=False)
     enable_comments   = models.BooleanField(default=True)
     objects           = models.Manager()
     shared_objects    = PublicManager()
@@ -39,7 +39,7 @@ class Bookmark(models.Model):
     class Meta:
         ordering = ('-save_date',)
         
-    def save(self, syncAPI=False, force_insert=False, force_update=False):
+    def save(self, syncAPI=False, *args, **kwargs):
         """
         syncAPI is True for all calls from djangolicious.utils.DeliciousSyncDB.
         
@@ -54,10 +54,9 @@ class Bookmark(models.Model):
             self.slug = slugify(self.title)
         if self.notes:
             self.notes_html  = smartyPants(markdown(self.notes))
-        if syncAPI == False:
-            self.queued = True
-                                   
-        super(Bookmark, self).save(force_insert, force_update)
+        if not syncAPI:
+            self.queued=True                           
+        super(Bookmark, self).save(**kwargs)
         
     @permalink
     def get_absolute_url(self):
