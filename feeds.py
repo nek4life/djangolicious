@@ -14,7 +14,7 @@ class LatestBookmarksFeed(Feed):
     title = "%s: Latest Links" % current_site.name
     
     def items(self):
-        return Bookmark.shared_objects.all()[:15]
+        return Bookmark.objects.filter(shared=True)[:15]
         
     def item_pubdate(self, item):
         return item.save_date
