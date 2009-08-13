@@ -19,7 +19,7 @@ class Bookmark(models.Model):
     """ Bookmark model """
     title             = models.CharField(max_length=250)
     slug              = models.SlugField(max_length=250)
-    url               = models.URLField(max_length=500, unique=True, verify_exists=False)
+    url               = models.URLField(max_length=255, unique=True, verify_exists=False)
     tags              = TagField()
     notes             = models.TextField(blank=True, null=True)
     notes_html        = models.TextField(blank=True)
