@@ -1,6 +1,6 @@
-from pydelicious import DeliciousAPI
-import dateutil.parser, dateutil.tz
 import time
+import datetime
+from pydelicious import DeliciousAPI
 
 from djangolicious.models import Bookmark
 
@@ -35,7 +35,8 @@ class DeliciousSyncDB:
         In the case a bookmark already exists it will be
         updated instead.
         """
-        save_date = dateutil.parser.parse(post['time'])
+        time_obj = time.strptime(post['time'], "%Y-%m-%dT%H:%M:%SZ")
+        save_date = datetime.datetime(*time_obj[0:7])
         
         try:
             shared = post['shared']
